@@ -2,7 +2,7 @@
 
 Установка библиотек
 
-pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client python-telegram-bot
+pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client python-telegram-bot pyzipper
 
 # Настройка Google Drive API:
 Потребуется создать проект в Google Cloud Console и включить Google Drive API.
