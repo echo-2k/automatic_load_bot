@@ -1,6 +1,7 @@
 # automatic_load_bot - Скрипт который загружает файлы каждые 30 минут и отправляет ссылки на них в Telegram. 
 
 Установка библиотек
+
 pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client python-telegram-bot
 
 # Настройка Google Drive API:
