@@ -1,26 +1,34 @@
-# automatic_load_bot
+# automatic_load_bot - Скрипт который загружает файлы каждые 30 минут и отправляет ссылки на них в Telegram. 
 
+Установка библиотек
 pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client python-telegram-bot
 
-Настройка Google Drive API:
-
+# Настройка Google Drive API:
 Потребуется создать проект в Google Cloud Console и включить Google Drive API.
 Сгенерировать файл учетных данных (service account JSON) и скачать его.
 Указать ID папки в Google Drive, куда будут загружаться файлы.
 
-Настройка Telegram бота:
-
+# Настройка Telegram бота:
 Создать бота через BotFather в Telegram и получить токен.
-Получить Chat ID, куда будут отправляться уведомления (например, с помощью curl "https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates").
+Получить Chat ID, куда будут отправляться уведомления "https://api.telegram.org/bot<TOKEN>/getUpdates").
 
-Функция upload_files():
+# Для создания исполняемого файла будем ипользовать библиотеку pyinstaller
 
-Загружает все файлы из указанной директории в Google Drive.
-Отправляет сообщение в Telegram с ссылкой на каждый загруженный файл.
-Основной цикл в функции main():
+Установка библиотеки
+pip install pyinstaller
+Исполняемый файл находится в директории dist.
+чтобы остановить бота использовать комбинацию клавиш Ctrl+C в терминале.
 
-Выполняет функцию upload_files() каждые 30 минут с помощью time.sleep(1800).
+# Для Windows
+
+1. Открыть командную строку.
+2. Перейти в директорию с скриптом.
+3. Выполнить команду: pyinstaller --onefile bot.py
 
 
+# Для Linux
 
-Этот скрипт будет загружать файлы каждые 30 минут и отправлять ссылки на них в Telegram. 
+1. Открыть терминал.
+2. Перейти в директорию с скриптом.
+3. Выполните команду: pyinstaller --onefile bot.py
+

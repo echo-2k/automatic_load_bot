@@ -6,20 +6,17 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-# Параметры
-FOLDER_ID = 'your_google_drive_folder_id'  # Замените на ваш ID папки в Google Drive
-TELEGRAM_TOKEN = 'your_telegram_bot_token'  # Замените на ваш токен бота Telegram
-CHAT_ID = 'your_chat_id'  # Замените на ваш Chat ID
-FILES_DIRECTORY = '/path/to/your/files'  # Замените на путь к папке с файлами
+TELEGRAM_TOKEN = '123'
+CHAT_ID = '123'
+FOLDER_ID = '123'
+FILES_DIRECTORY = ''
 
-# Настройка Google Drive API
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
-SERVICE_ACCOUNT_FILE = 'path/to/your/service-account-file.json'  # Замените на путь к вашему файлу учетных данных
+SERVICE_ACCOUNT_FILE = ''
 
 credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
 service = build('drive', 'v3', credentials=credentials)
 
-# Настройка Telegram бота
 bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
 def upload_files():
@@ -31,17 +28,22 @@ def upload_files():
                 'name': file_name,
                 'parents': [FOLDER_ID]
             }
-            media = MediaFileUpload(file_path, mimetype='application/octet-stream')
-            uploaded_file = service.files().create(body=file_metadata, media_body=media, fields='id,webViewLink').execute()
-            file_id = uploaded_file.get('id')
-            file_link = uploaded_file.get('webViewLink')
-            bot.send_message(chat_id=CHAT_ID, text=f"Файл загружен: {file_name}\nСсылка: {file_link}")
+            media = MediaFileUpload(file_path, resumable=True)
+            request = service.files().create(body=file_metadata, media_body=media, fields='id,webViewLink')
+            response = None
+            while response is None:
+                status, response = request.next_chunk()
+                if status:
+                    print(f"Uploaded {int(status.progress() * 100)}%.")
+
+            file_id = response.get('id')
+            file_link = response.get('webViewLink')
+            bot.send_message(chat_id=CHAT_ID, text=f"File downloaded: {file_name}\nlink: {file_link}")
 
 def main():
     while True:
         upload_files()
-        time.sleep(1800)  # Пауза 30 минут
+        time.sleep(1800)
 
 if __name__ == '__main__':
     main()
-  
