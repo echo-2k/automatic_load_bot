@@ -11,7 +11,7 @@ pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-pyt
 
 # Настройка Telegram бота:
 Создать бота через BotFather в Telegram и получить токен.
-Получить Chat ID, куда будут отправляться уведомления "https://api.telegram.org/bot<TOKEN>/getUpdates").
+Получить Chat ID, куда будут отправляться уведомления "https://api.telegram.org/bot`<TOKEN>`/getUpdates").
 
 # Для создания исполняемого файла будем ипользовать библиотеку pyinstaller
 
