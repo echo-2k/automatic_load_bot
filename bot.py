@@ -13,7 +13,7 @@ CHAT_ID = '123'
 FOLDER_ID = '123'
 FILES_DIRECTORY = ''
 ARCHIVE_NAME = 'files.zip'
-# ARCHIVE_PASSWORD = 'password'
+ARCHIVE_PASSWORD = 'password'
 SERVICE_ACCOUNT_FILE = ''
 
 SCOPES = ['https://www.googleapis.com/auth/drive.file']
@@ -22,30 +22,35 @@ service = build('drive', 'v3', credentials=credentials)
 
 bot = telegram.Bot(token=TELEGRAM_TOKEN)
 
-# def create_archive_with_password(directory, archive_name, password):
-#     with pyzipper.AESZipFile(archive_name, 'w', compression=pyzipper.ZIP_DEFLATED) as zf:
-#         zf.setpassword(password.encode())
-#         for foldername, subfolders, filenames in os.walk(directory):
-#             for filename in filenames:
-#                 file_path = os.path.join(foldername, filename)
-#                 arcname = os.path.relpath(file_path, start=directory)
-#                 zf.write(file_path, arcname)
-
-def create_archive(directory, archive_name):
+def create_archive(directory, archive_name, password):
     try:
         with pyzipper.AESZipFile(archive_name, 'w', compression=pyzipper.ZIP_DEFLATED) as zf:
+            zf.pwd = password.encode('utf-8')
             for foldername, subfolders, filenames in os.walk(directory):
                 for filename in filenames:
                     file_path = os.path.join(foldername, filename)
                     arcname = os.path.relpath(file_path, start=directory)
                     print(f"Adding {file_path} as {arcname} to archive")
                     zf.write(file_path, arcname)
-        print(f"Archive {archive_name}")
+        print(f"Archive {archive_name} created successfully with password protection.")
     except Exception as e:
-        print(f"Failed: {e}")
+        print(f"Failed to create archive: {e}") 
+
+# def create_archive(directory, archive_name):
+#     try:
+#         with pyzipper.AESZipFile(archive_name, 'w', compression=pyzipper.ZIP_DEFLATED) as zf:
+#             for foldername, subfolders, filenames in os.walk(directory):
+#                 for filename in filenames:
+#                     file_path = os.path.join(foldername, filename)
+#                     arcname = os.path.relpath(file_path, start=directory)
+#                     print(f"Adding {file_path} as {arcname} to archive")
+#                     zf.write(file_path, arcname)
+#         print(f"Archive {archive_name}")
+#     except Exception as e:
+#         print(f"Failed: {e}")
 
 async def upload_files():
-    create_archive_with_password(FILES_DIRECTORY, ARCHIVE_NAME, ARCHIVE_PASSWORD)
+    create_archive(FILES_DIRECTORY, ARCHIVE_NAME, ARCHIVE_PASSWORD)
     archive_path = ARCHIVE_NAME
     
     file_metadata = {
